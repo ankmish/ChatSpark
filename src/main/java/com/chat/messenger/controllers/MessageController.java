@@ -1,5 +1,6 @@
 package com.chat.messenger.controllers;
 
+import com.chat.messenger.dto.GroupMessageDTO;
 import com.chat.messenger.dto.Message;
 import com.chat.messenger.dto.MessageDTO;
 import com.chat.messenger.dto.User;
@@ -111,6 +112,20 @@ public class MessageController {
         } else {
             return "{\"status\":\"failure\", \"message\":\"User not logged in\"}";
         }
+    }
+
+    //  to send a message to a group of users
+    @PostMapping("/send/text/group")
+    public String sendGroupMessage(@RequestBody GroupMessageDTO groupMessageDTO) {
+        String sender = groupMessageDTO.getSender();
+        if (!isLoggedIn(sender)) {
+            return "{\"status\":\"failure\", \"message\":\"User not logged in\"}";
+        }
+
+        List<String> recipients = groupMessageDTO.getRecipients();
+        String text = groupMessageDTO.getText();
+        messageService.sendGroupMessage(sender, recipients, text);
+        return "{\"status\":\"success\"}";
     }
 
     private boolean isLoggedIn(String username) {

@@ -51,4 +51,13 @@ public class MessageService {
         }
         return chatHistory;
     }
+
+    public void sendGroupMessage(String sender, List<String> recipients, String text) {
+        for (String recipient : recipients) {
+            User user = messageDao.getUser(recipient);
+            if (user != null) {
+                user.getMessages().add(new Message(sender, recipient, text, false));
+            }
+        }
+    }
 }
