@@ -7,6 +7,7 @@ import com.chat.messenger.dto.User;
 import com.chat.messenger.dto.UserDTO;
 import com.chat.messenger.services.MessageService;
 import com.chat.messenger.services.UserService;
+import com.chat.messenger.utils.ConverterUtil;
 import com.google.gson.Gson;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/chat-spark")
 public class MessageController {
 
     private final UserService userService;
@@ -60,7 +62,7 @@ public class MessageController {
     public String getUsers(@RequestParam String username) {
         if (isLoggedIn(username)) {
             List<String> usernames = userService.getAllUsernames();
-            return "{\"status\":\"success\", \"data\":" + toJson(usernames) + "}";
+            return "{\"status\":\"success\", \"data\":" + ConverterUtil.toJson(usernames) + "}";
         } else {
             return "{\"status\":\"failure\", \"message\":\"User not logged in\"}";
         }
@@ -72,7 +74,7 @@ public class MessageController {
         if (isLoggedIn(username)) {
             List<Message> unreadMessages = messageService.getUnreadMessages(username);
             return "{\"status\":\"success\", \"message\":\"You have message(s)\", \"data\":" +
-                    toJson(unreadMessages) + "}";
+                    ConverterUtil.toJson(unreadMessages) + "}";
         } else {
             return "{\"status\":\"failure\", \"message\":\"User not logged in\"}";
         }
@@ -96,7 +98,7 @@ public class MessageController {
         // Check if the user is logged in
         if (isLoggedIn(user)) {
             List<Message> chatHistory = messageService.getChatHistory(user, friend);
-            return "{\"status\":\"success\", \"data\":" + toJson(chatHistory) + "}";
+            return "{\"status\":\"success\", \"data\":" + ConverterUtil.toJson(chatHistory) + "}";
         } else {
             return "{\"status\":\"failure\", \"message\":\"User not logged in\"}";
         }
@@ -130,10 +132,6 @@ public class MessageController {
 
     private boolean isLoggedIn(String username) {
         return loggedInUsers.containsKey(username) && loggedInUsers.get(username);
-    }
-
-    private String toJson(Object data) {
-        return new Gson().toJson(data);
     }
 }
 
