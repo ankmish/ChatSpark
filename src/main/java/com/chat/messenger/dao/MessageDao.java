@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class MessageDao {
     private Map<String, User> users;
-
     public MessageDao() {
         this.users = new HashMap<>();
     }
