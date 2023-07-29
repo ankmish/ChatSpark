@@ -11,6 +11,7 @@ import com.chat.messenger.utils.ConverterUtil;
 import com.google.gson.Gson;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,7 +62,8 @@ public class MessageController {
     @GetMapping("/get/users")
     public String getUsers(@RequestParam String username) {
         if (isLoggedIn(username)) {
-            List<String> usernames = userService.getAllUsernames();
+            List<String> usernames = userService.getAllUsernames()
+                    .stream().filter(user -> !user.equals(username)).collect(Collectors.toList());
             return "{\"status\":\"success\", \"data\":" + ConverterUtil.toJson(usernames) + "}";
         } else {
             return "{\"status\":\"failure\", \"message\":\"User not logged in\"}";
