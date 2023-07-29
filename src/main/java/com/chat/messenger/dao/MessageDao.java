@@ -14,7 +14,6 @@ public class MessageDao {
     public MessageDao() {
         this.users = new HashMap<>();
     }
-
     public boolean addUser(User user) {
         if (!users.containsKey(user.getUsername())) {
             users.put(user.getUsername(), user);
