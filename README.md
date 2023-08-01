@@ -267,6 +267,40 @@ The server should also fetch the chat history requested by the user. The user sh
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Block user",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Cookie",
+						"value": "JSESSIONID=832497EC926617392DCD388E336F52FC"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"blockedBy\": \"johnsmith007\",\n  \"blockedTo\": \"\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/chat-spark/block/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"chat-spark",
+						"block",
+						"user"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
