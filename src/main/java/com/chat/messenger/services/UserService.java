@@ -30,5 +30,8 @@ public class UserService {
         }
         return usernames;
     }
+    public boolean blockUserByUserName(String blockerName, String blockedToName) {
+        return messageDao.blockUser(blockerName, blockedToName);
+    }
 }
 

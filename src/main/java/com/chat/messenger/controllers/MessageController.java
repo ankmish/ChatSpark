@@ -4,6 +4,7 @@ import com.chat.messenger.dto.GroupMessageDTO;
 import com.chat.messenger.dto.Message;
 import com.chat.messenger.dto.MessageDTO;
 import com.chat.messenger.dto.User;
+import com.chat.messenger.dto.UserBlockRequest;
 import com.chat.messenger.dto.UserDTO;
 import com.chat.messenger.services.MessageService;
 import com.chat.messenger.services.UserService;
@@ -45,6 +46,18 @@ public class MessageController {
         }
     }
 
+    @PostMapping("/block/user")
+    public String blockUser(@RequestBody UserBlockRequest userBlockRequest) {
+        String blockerName = userBlockRequest.getBlockedBy();
+        String blockedToName = userBlockRequest.getBlockedTo();
+        boolean isBlocked = userService.blockUserByUserName(blockerName, blockedToName);
+        if (isBlocked) {
+            return "{\"status\":\"success\"}";
+        } else {
+            return "{\"status\":\"failure\", \"message\":\"Failure while blocking user\"}";
+        }
+    }
+
     @PostMapping("/login")
     public String loginUser(@RequestBody UserDTO userDTO) {
         String username = userDTO.getUsername();
@@ -83,7 +96,7 @@ public class MessageController {
     }
 
     @PostMapping("/send/text/user")
-    public String sendMessage(@RequestBody MessageDTO messageDTO) {
+    public String sendMessage(@RequestBody MessageDTO messageDTO) throws Exception {
         String sender = messageDTO.getFrom();
         // Check if the sender is logged in
         if (!isLoggedIn(sender)) {

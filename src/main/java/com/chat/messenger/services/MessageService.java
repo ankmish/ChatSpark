@@ -30,10 +30,19 @@ public class MessageService {
         return unreadMessages;
     }
 
-    public void sendMessage(String sender, String recipient, String text) {
+    public void sendMessage(String sender, String recipient, String text) throws Exception {
+       checkIfUserIsBlocked(sender, recipient);
         User user = messageDao.getUser(recipient);
         if (user != null) {
             user.getMessages().add(new Message(sender, recipient, text, false));
+        }
+    }
+
+    private void checkIfUserIsBlocked(String sender, String recipient) throws Exception {
+        List<String> senderBlockedList = messageDao.getBlockListForUser(sender);
+        List<String> recipientBlockedList = messageDao.getBlockListForUser(recipient);
+        if(senderBlockedList.contains(recipient) || recipientBlockedList.contains(sender)) {
+            throw new Exception("Sender/Recipient is in block list");
         }
     }
 
